@@ -1,0 +1,5 @@
+# Exclude stocks.csv so it is mounted at runtime instead
+stocks.csv
+*.log
+*.pyc
+__pycache__/

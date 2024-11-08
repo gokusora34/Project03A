@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Chart Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stock Chart Generator</h1>
+    <form method="POST">
+        <label>Stock Symbol: 
+            <select name="symbol" required>
+                <option value="">Select a Stock Symbol</option>
+                {% for symbol in symbols %}
+                <option value="{{ symbol }}">{{ symbol }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+        
+        <label>Chart Type: 
+            <select name="chart_type">
+                <option value="line">Line</option>
+                <option value="bar">Bar</option>
+            </select>
+        </label><br>
+        
+        <label>Time Series: 
+            <select name="time_series_function" onchange="showInterval(this)">
+                <option value="TIME_SERIES_DAILY">Daily</option>
+                <option value="TIME_SERIES_WEEKLY">Weekly</option>
+                <option value="TIME_SERIES_MONTHLY">Monthly</option>
+                <option value="TIME_SERIES_INTRADAY">Intraday</option>
+            </select>
+        </label><br>
+        
+        <div id="interval-div" style="display:none;">
+            <label>Interval:
+                <select name="interval">
+                    <option value="1min">1 min</option>
+                    <option value="5min">5 min</option>
+                    <option value="15min">15 min</option>
+                    <option value="30min">30 min</option>
+                    <option value="60min">60 min</option>
+                </select>
+            </label><br>
+        </div>
+        
+        <label>Start Date: <input type="date" name="start_date" required></label><br>
+        <label>End Date: <input type="date" name="end_date" required></label><br>
+        
+        <button type="submit">Generate Chart</button>
+    </form>
+
+    <!-- Display the generated chart or an error message -->
+    {% if chart_path %}
+    <h2>Generated Chart:</h2>
+    <img src="{{ chart_path }}" alt="Stock Chart">
+    {% elif error %}
+    <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <script>
+        // Show the interval dropdown only if "Intraday" is selected
+        function showInterval(select) {
+            document.getElementById("interval-div").style.display = select.value === "TIME_SERIES_INTRADAY" ? "block" : "none";
+        }
+    </script>
+</body>
+</html>
